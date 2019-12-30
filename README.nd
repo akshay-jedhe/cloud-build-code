@@ -1,0 +1,2 @@
+creating the cloud-build localy:
+cloud-build-local --config=./cloudbuild.yml --dryrun=false .
