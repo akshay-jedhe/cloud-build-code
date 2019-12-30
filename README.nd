@@ -1,2 +1,4 @@
-creating the cloud-build localy:
+1.creating the cloud-build localy:
 cloud-build-local --config=./cloudbuild.yml --dryrun=false .
+2.creating cloud build localy and saving intermediate artifacts from workspace to local directory (/home/akshay_jedhe1995/app/)
+cloud-build-local --config=./cloudbuild.yml --dryrun=false --write-workspace=/home/akshay_jedhe1995/app/ .
