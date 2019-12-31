@@ -1,3 +1,9 @@
 steps:
-- name: 'gcr.io/cloud-builders/javac'
-  args: ['Simple.java']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build','-t','demo:${_IMG_TAG}','.']
+substitutions:
+   _IMG_TAG: v1.0
+options:
+   substitution_option: 'ALLOW_LOOSE'
+
+

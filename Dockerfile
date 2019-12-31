@@ -1,2 +1,3 @@
 FROM centos
-RUN echo "hello from cloud-build localy!"
+RUN echo "The new image is building!"
+ENTRYPOINT ["tail","-f","/dev/null"]
