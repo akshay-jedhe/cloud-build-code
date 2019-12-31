@@ -1,9 +1,18 @@
 steps:
+# immediately running step.
+- name: 'centos'
+  args: ['echo','BUILD-ID : ${BUILD_ID}']
+  waitFor:
+  - '-'
+# first step going to run
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build','-t','demo:${_IMG_TAG}','.']
-substitutions:
-   _IMG_TAG: v1.0
-options:
-   substitution_option: 'ALLOW_LOOSE'
+  args: ['build','-t','custom-nginx','.']
+  id: 'build-phase'
+# step wait until the build phase complete its execution successfully.
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['run','-d','--name=my-nginx-ctn','custom-nginx']
+  id: 'run-phase'
+  waitFor:
+  - 'build-phase'
 
 
