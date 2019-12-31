@@ -1,18 +1,30 @@
 steps:
-# immediately running step.
-- name: 'centos'
-  args: ['echo','BUILD-ID : ${BUILD_ID}']
+  # Pulling akshayjedhe/java-host:1.0.0 public image from DOCKER HUB.
+- name: 'akshayjedhe/java-host:1.0.0'
+  args: ['java','-version']
+  id: 'ppi-phase' #pulling public image phase.
   waitFor:
   - '-'
-# first step going to run
+  # Building demo-image:latest that is going to be pushed.
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build','-t','custom-nginx','.']
-  id: 'build-phase'
-# step wait until the build phase complete its execution successfully.
+  args: ['build','-t','akshayjedhe/demo-image:latest','.']
+  id: 'build-phase' #docker image build phase.
+  # Authenticate with DOCKER HUB.
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['run','-d','--name=my-nginx-ctn','custom-nginx']
-  id: 'run-phase'
+  args: ['login','--username','${_USERNAME}','--password','${_PASSWORD}']
+  id: 'dha-phase' #docker hub auth phase.
   waitFor:
   - 'build-phase'
+  # Pushing demo-image:latest public image to repository akshayjedhe/demo-image of DOCKER HUB.
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push','akshayjedhe/demo-image:latest']
+  id: 'pushpii-phase' #pushing public image phase.
+  waitFor:
+  - 'dha-phase'
+substitutions:
+   _USERNAME: '<DOCKER_HUB_USERNAME>'
+   _PASSWORD: '<DOCKER_HUB_PASSWORD>'
+options:
+   substitution_option: 'ALLOW_LOOSE'
 
 
