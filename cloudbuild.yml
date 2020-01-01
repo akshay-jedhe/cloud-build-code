@@ -1,30 +1,14 @@
 steps:
-  # Pulling akshayjedhe/java-host:1.0.0 public image from DOCKER HUB.
-- name: 'akshayjedhe/java-host:1.0.0'
-  args: ['java','-version']
-  id: 'ppi-phase' #pulling public image phase.
-  waitFor:
-  - '-'
-  # Building demo-image:latest that is going to be pushed.
+# build step for building image demo-image:latest
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build','-t','akshayjedhe/demo-image:latest','.']
-  id: 'build-phase' #docker image build phase.
-  # Authenticate with DOCKER HUB.
+  args: ['build','-t','demo-image:v3.0','.']
+# build step for tagging the image tag=gcr.io/${PROJECT_ID}
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['login','--username','${_USERNAME}','--password','${_PASSWORD}']
-  id: 'dha-phase' #docker hub auth phase.
-  waitFor:
-  - 'build-phase'
-  # Pushing demo-image:latest public image to repository akshayjedhe/demo-image of DOCKER HUB.
+  args: ['tag','demo-image:v3.0','gcr.io/${PROJECT_ID}/demo-image:v3.0']
+# build step for pushing an image to gcr as part of build step.
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push','akshayjedhe/demo-image:latest']
-  id: 'pushpii-phase' #pushing public image phase.
-  waitFor:
-  - 'dha-phase'
-substitutions:
-   _USERNAME: '<DOCKER_HUB_USERNAME>'
-   _PASSWORD: '<DOCKER_HUB_PASSWORD>'
-options:
-   substitution_option: 'ALLOW_LOOSE'
+  args: ['push','gcr.io/${PROJECT_ID}/demo-image:v3.0']
+# pushing image demo-image to gcr as part of images array.
+images: ['gcr.io/${PROJECT_ID}/demo-image:v3.0']
 
 

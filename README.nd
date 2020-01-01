@@ -4,4 +4,5 @@ cloud-build-local --config=./cloudbuild.yml --dryrun=false .
 cloud-build-local --config=./cloudbuild.yml --dryrun=false --write-workspace=/home/<user-dir>/app/ .
 3.creating cloud build localy and use substitutions for run time variable.
 cloud-build-local --config=./cloudbuild.yml --dryrun=false --substitutions=_IMG_TAG="v2.0" .
-
+4.creating cloud build localy and pushing it to gcr (image registery server)
+cloud-build-local --config=./cloudbuild.yml --dryrun=false --push .
