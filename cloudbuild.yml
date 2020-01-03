@@ -1,10 +1,15 @@
 steps:
-# build step for compiling java file.
-- name: 'gcr.io/cloud-builders/javac'
-  args: ['@javaClasses']
-artifacts:
-   objects:
-      location: 'gs://cloud_build_bucket/files'
-      paths: ['*java','cloudbuild.yml','Simple.class','Demo.class'] 
-
-
+# build step for fetching the source code.
+- name: 'gcr.io/cloud-builders/git'
+  args: ['clone','https://github.com/akshay-jedhe/SpringBootProjects.git']
+# build step for building the docker image of spring-boot project
+- name: 'gcr.io/cloud-builders/docker'
+  dir: './SpringBootProjects/'
+  args: ['build','-t','gcr.io/${PROJECT_ID}/myproject-image:latest','.']
+# build step for pushing image to gcr
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push','gcr.io/${PROJECT_ID}/myproject-image']
+# build step for runing the image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['run','-d','--name=myapp','-p=30001:30001','gcr.io/${PROJECT_ID}/myproject-image']
+  
