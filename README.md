@@ -1,3 +1,2 @@
-Building the cloud build using build config file
-gcloud builds submit --config=./cloudbuild.yml .
-Adding the .gcloudignore which acts same as .dockerignore.
+filtering the build results using tags in config file
+gcloud builds list --filter "tags='st'"
