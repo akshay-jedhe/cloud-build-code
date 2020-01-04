@@ -1,2 +1,5 @@
-filtering the build results using tags in config file
-gcloud builds list --filter "tags='st'"
+custom java cloudbuilder:
+1.run cloud builder:
+cmd: gcloud builds submit --config=./cloudbuild.yml .
+2.run applicant build:
+cmd: gcloud builds submit --config=./cloudbuild.yml .
