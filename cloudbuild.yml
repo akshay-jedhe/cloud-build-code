@@ -1,5 +1,14 @@
 steps:
-- name: 'gcr.io/cloud-builders/javac'
-  args: ['HelloWorld.java']
-- name: 'gcr.io/${PROJECT_ID}/java'
-  args: ['HelloWorld']
+- name: 'gcr.io/cloud-builders/docker'
+  entrypoint: 'bash'
+  args: ['-c', 'docker login --username=[USERNAME] --password=$$PASSWORD']
+  secretEnv: ['PASSWORD']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build','-t','[USERNAME]/cloudbuild-greeting:latest','.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push','[USERNAME]/cloudbuild-greeting']
+
+secrets:
+- kmsKeyName: projects/[PROJECT_ID]/locations/global/keyRings/[KEYRING_NAME]/cryptoKeys/[KEY_NAME]
+  secretEnv:
+    PASSWORD: [BASE64-ENCODED-STRING]
